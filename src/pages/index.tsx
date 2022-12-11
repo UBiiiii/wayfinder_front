@@ -76,7 +76,7 @@ const Home: NextPage = () => {
 
       const unsubscribe = _db.onValue(_db.ref(db, floor),
         (snapshot)=>{
-        let lst : any = [];
+          const lst : any = [];
           if(snapshot.exists()) {
             snapshot.forEach((dat)=>{
               const pos = dat.val()['position_key'];
@@ -95,7 +95,7 @@ const Home: NextPage = () => {
     if(floor!=="") {
       const unsubscribe = _db.onValue(_db.ref(db,`nodes/${floor}`),
         (snapshot)=>{
-          let lst2 : any = [];
+          const lst2 : any = [];
           if(snapshot.exists()) {
             snapshot.forEach((dat)=>{
               lst2.push({id:dat.key, ...dat.val(),links:dat.val().links || []});
@@ -113,7 +113,7 @@ const Home: NextPage = () => {
     if(floor!=="") {
       const unsubscribe = _db.onValue(_db.ref(db,`bles/${floor}`),
         (snapshot)=>{
-          let lst : any = [];
+          const lst : any = [];
           if(snapshot.exists()) {
             snapshot.forEach((dat)=>{
               lst.push({id:dat.key, ...dat.val()});
