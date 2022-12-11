@@ -100,6 +100,7 @@ const Home: NextPage = () => {
               lst2.push({id:dat.key, ...dat.val(),links:dat.val().links || []});
             })
           }
+          console.log(`check useEffect nodes ${lst2}`);
           dispatch(setNodes(lst2));
       })
 
@@ -116,6 +117,7 @@ const Home: NextPage = () => {
             snapshot.forEach((dat)=>{
               lst.push({id:dat.key, ...dat.val()});
             })
+            console.log(`check useEffect bles ${lst}`);
           }
           dispatch(setBles(lst));
       })
