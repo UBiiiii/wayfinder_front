@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setBles, setNodes, setRooms } from '../redux/slices/roomSlice'
 import { LinkInfo, NodeInfo, RoomInfo } from '../config/interface'
 import Header from '../component/Header'
+import Image from 'next/image'
 
 interface room {
   name: string,
@@ -637,11 +638,12 @@ const Home: NextPage = () => {
               id="mobileView"
               className="relative w-[517px] h-[1180px]"
             >
-              <img id=""
-                src={mobileBackground}
-                className="flex w-full h-full object-cover"
-              />
-              {rooms?.length && rooms?.filter((el:RoomInfo)=>el["position_key"]!==undefined).map((v:RoomInfo, i:number)=>(
+                <Image id=""
+                  src={mobileBackground}
+                  className="flex w-full h-full object-cover"
+                  layout='fill'
+                />
+                {rooms?.length && rooms?.filter((el:RoomInfo)=>el["position_key"]!==undefined).map((v:RoomInfo, i:number)=>(
                 <RoomPrint data={v} key={i} pos={"mobile"}/>
               ))}
             </div>
@@ -655,9 +657,10 @@ const Home: NextPage = () => {
               className="relative w-[517px] h-[1180px] bg-no-repeat bg-center bg-cover bg-white dark:bg-black"
               onMouseDown={(e)=>addNode(e)}
             >
-              <img
+              <Image
                 src={floorBackground}
                 className="flex w-full h-full object-cover"
+                layout='fill'
               />
               {rooms?.length && rooms?.filter((el:RoomInfo)=>el["position_key"]!==undefined).map((data:RoomInfo, key:number)=>(
                 <RoomPrint data={data} key={key} pos={"mirror"}/>
