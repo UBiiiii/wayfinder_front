@@ -1,0 +1,192 @@
+{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+
+/* index.html */
+.secondContainer {
+    width: 100%;
+}
+
+#dropdown {
+    position: relative;
+    width: 100%;
+    height: 50px;
+}
+
+#floorButton {
+    position: absolute;
+    float: left;
+    left: 30px;
+}
+
+#save {
+    position: absolute;
+    float: right;
+    right: 30px;
+    width: 80px;
+}
+
+.placeInformationModify {
+    display: grid;
+    place-items: center;
+    position: relative;
+    height: 100px;
+}
+
+.input-group {
+    width: 80%;
+}
+
+.detailBox {
+    display: grid;
+    place-items: center;
+    position: relative;
+    height: 150px;
+    width: 100%;
+}
+
+.input-group-detail {
+    width: 80%;   
+}
+
+#detail-span {
+    display: inline-block;
+}
+
+#Detail {
+    height: 100px;
+    width: 100%;
+}
+
+/* .input-group-text-d {
+    height: 100px;
+} */
+
+.mapDefinition {
+    text-align: center;
+    width: 100%;
+    height: 40px;
+}
+
+.mapDefinitionIn {
+    display: inline-block;
+    width: 1500px;
+    height: 40px;
+}
+
+.manageZone {
+    width: 537px;
+    float: left;
+    font-size: 30px;
+}
+
+.userViewZone {
+    width: 537px;
+    float: right;
+    font-size: 30px;
+}
+
+.container2 {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 1250px;
+}
+
+.mapImage {
+    width: 1500px;
+    height: 1200px;
+}
+
+
+.thumbnail {
+    /* max-width: 200px; */
+    float: left;
+    position: relative;
+    width: 537px;
+    height: 1200px;
+    border: 10px solid darkblue;
+    /* background-size: cover; */
+    /* background-position: center; */
+}
+
+.changed {
+    /* max-width: 200px; */
+    float: right;
+    position: relative;
+    width: 537px;
+    height: 1200px;
+    border: 10px solid darkblue;
+    /* background-size: cover; */
+    /* background-position: center; */
+}
+
+/* .changedImg3 {
+    float: right;
+    position: relative;
+    width: 537px;
+    height: 1200px;
+    border: 10px solid darkblue;
+} */
+
+.mapImg3 {
+    position: absolute;
+}
+
+
+.button {
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    height: 30px;
+}
+
+#navbar {
+    position: relative;
+}
+
+#logout {
+    position: absolute;
+    right: 20px;
+    /* width: 100px;
+    height: 40px; */
+    text-align: center;
+}
+
+/* #loadingImg {
+} */
+
+/* login.html */
+.logoBox {
+    height: 400px;
+    text-align: center;
+}
+
+.logo {
+    display: inline-block;
+    place-items: center;
+    width: 500px;
+    height: 400px;
+    text-align: center;
+    font-size: 100px;
+    font-weight: bold;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.loginInput {
+    text-align: center;
+    margin: auto;
+}
+
+.form-control {
+    width: 250px;
+    display: inline-block;
+    place-items: center;
+}
+
+#login {
+    display: block;
+    margin: auto;
+    width: 150px;
+}
