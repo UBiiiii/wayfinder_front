@@ -82,6 +82,7 @@ const Home: NextPage = () => {
               const pos = dat.val()['position_key'];
               if(pos) lst.push({id:dat.key, ...dat.val()});
             })
+            console.log(`check useEffect nodes ${lst}`);
           }
           dispatch(setRooms(lst));
       })
@@ -99,8 +100,8 @@ const Home: NextPage = () => {
             snapshot.forEach((dat)=>{
               lst2.push({id:dat.key, ...dat.val(),links:dat.val().links || []});
             })
+            console.log(`check useEffect nodes ${lst2}`);
           }
-          console.log(`check useEffect nodes ${lst2}`);
           dispatch(setNodes(lst2));
       })
 
