@@ -702,7 +702,6 @@ const Home: NextPage = () => {
               {bles?.length && bles?.map((data:any, key:number)=>(
                 <BLEPrint data={data} key={key}/>
               ))}
-              <canvas ref={canvasRef} className="absolute w-full h-full"></canvas>
             </div>
           </div>
 
