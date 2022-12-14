@@ -1,19 +1,23 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { CgSpinner } from "react-icons/cg";
 import { auth, _auth } from "../config/firebase";
 
 const Login = () => {
 
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
 
   const router = useRouter();
 
   const onSubmit = async () => {
     try{
+      setIsLogin(true);
       await _auth.signInWithEmailAndPassword(auth, email+"@map.com", pw);
       router.replace("/");
     } catch (err) {
+      setIsLogin(false);
       console.log(err);
     }
     
@@ -42,10 +46,15 @@ const Login = () => {
             setPw(e.target.value);
           }}/>
         </label>
+        {isLogin ?
+        <CgSpinner className="text-gray-500 animate-spin text-2xl"/>
+        :
         <button 
           className="rounded-md border-2 border-black mx-auto px-5 py-2"
           onClick={onSubmit}
         > Sign in</button>
+        }
+        
       </div>
     </div>
   )

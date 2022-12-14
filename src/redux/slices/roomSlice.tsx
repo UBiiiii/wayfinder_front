@@ -10,6 +10,8 @@ export const roomsSlice = createSlice({
 
     bles:[],
 
+    links:[],
+
     loading: null,
   },
   reducers: {
@@ -21,6 +23,9 @@ export const roomsSlice = createSlice({
     },
     setBles: (state, action)=>{
       state.bles = action.payload;
+    },
+    setLinks: (state, action)=>{
+      state.links = action.payload;
     }
   },
 
@@ -55,6 +60,7 @@ export const {
   setRooms,
   setNodes,
   setBles,
+  setLinks,
 } = roomsSlice.actions;
 
 export default roomsSlice.reducer;

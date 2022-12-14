@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import withAuth from '../middleware/withAuth'
 import * as htmlToImage from "html-to-image"
 import { useDispatch, useSelector } from 'react-redux'
-import { setBles, setNodes, setRooms } from '../redux/slices/roomSlice'
+import { setBles, setLinks, setNodes, setRooms } from '../redux/slices/roomSlice'
 import { LinkInfo, NodeInfo, RoomInfo } from '../config/interface'
 import Header from '../component/Header'
 import Image from 'next/image'
@@ -26,6 +26,7 @@ const Home: NextPage = () => {
   const rooms : RoomInfo[] = useSelector((state:any)=>state.rooms.datas);
   const nodes = useSelector((state:any)=>state.rooms.nodes);
   const bles = useSelector((state:any)=>state.rooms.bles)
+  const links = useSelector((state:any)=>state.rooms.links);
 
   const userViewRef = useRef<HTMLDivElement>(null);
   const nodeRef = useRef<HTMLInputElement>(null);
@@ -52,6 +53,7 @@ const Home: NextPage = () => {
 
   const [showNode, setShowNode] = useState(false);
   const [showBLE, setShowBLE] = useState(false);
+  const [showLink, setShowLink] = useState(false);
   const [isDeleteNode, setIsDeleteNode] = useState(false);
 
   // 호실 담당자 참조 변수
@@ -82,7 +84,6 @@ const Home: NextPage = () => {
               const pos = dat.val()['position_key'];
               if(pos) lst.push({id:dat.key, ...dat.val()});
             })
-            console.log(`check useEffect nodes ${lst}`);
           }
           dispatch(setRooms(lst));
       })
@@ -100,7 +101,6 @@ const Home: NextPage = () => {
             snapshot.forEach((dat)=>{
               lst2.push({id:dat.key, ...dat.val(),links:dat.val().links || []});
             })
-            console.log(`check useEffect nodes ${lst2}`);
           }
           dispatch(setNodes(lst2));
       })
@@ -116,21 +116,57 @@ const Home: NextPage = () => {
           const lst : any = [];
           if(snapshot.exists()) {
             snapshot.forEach((dat)=>{
-              lst.push({id:dat.key, ...dat.val()});
+              const data = dat.val();
+              lst.push({id:dat.key, x:data.x * 1180/1837, y:data.y * 1180/1837});
             })
-            console.log(`check useEffect bles ${lst}`);
           }
           dispatch(setBles(lst));
       })
-
       return unsubscribe;
     }
   }, [floor])
 
+  useEffect(()=>{
+    if(floor!=="") {
+      const unsubscribe = _db.onValue(_db.ref(db,`links/${floor}`),
+        (snapshot)=>{
+          const lst : any = [];
+          if(snapshot.exists()) {
+            snapshot.forEach((dat)=>{
+              const data = dat.val();
+              lst.push({id:dat.key, ...data}); 
+            })
+          }
+          dispatch(setLinks(lst));
+      })
+      return unsubscribe;
+    }
+  }, [floor])
+
+  // useEffect(()=>{
+  //   const drawLink = async () => {
+  //     const nodes = (await _db.get(_db.ref(db, `nodes/${floor}`))).val();
+  //     const ctx = canvasRef.current?.getContext("2d");
+  //     if(ctx) {
+  //       ctx!.lineWidth = 200;
+  //       ctx!.strokeStyle = "blue";
+  //     }
+  //     ctx?.clearRect(0,0,517,1180);
+  //     links.forEach((data:any)=>{
+  //       ctx?.save();
+  //       ctx?.beginPath();
+  //       ctx?.moveTo(nodes[data.node1]?.x, nodes[data.node1]?.y);
+  //       ctx?.lineTo(nodes[data.node2]?.x, nodes[data.node2]?.y);
+  //       ctx?.closePath();
+  //       ctx?.stroke();
+  //       ctx?.restore();
+  //     })
+  //   }
+
+  //   drawLink();
+  // },[floor, showLink])
+
   const RoomButton = ({data, key}:any) => {
-    const x = data.position_key.x;
-    const y = data.position_key.y;
-    
     return (
       <button key={key}
         className={`
@@ -157,8 +193,6 @@ const Home: NextPage = () => {
   const RoomPrint = ({data, key, pos}:any) => {
     const x = data.position_key.x;
     const y = data.position_key.y;
-
-    const eng = "abcdefghijklmnopqrstuvwxyz"
 
     const name = data.name.split(" ");
     const print:string[] = [];
@@ -213,6 +247,7 @@ const Home: NextPage = () => {
       <div key={key}
         className={`absolute z-30 w-5 h-5 rounded-full text-sm cursor-pointer bg-blue-600 text-white
           ${showBLE ? "block" : "hidden"}
+           -translate-x-[74px] translate-y-3
         `}
         style={{
           top:`${y-10}px`,
@@ -358,7 +393,6 @@ const Home: NextPage = () => {
   }
 
   const addLink = async (node:NodeInfo) => {
-
     if(!selectedNode) {
       setSelectedNode(node);
       return;
@@ -404,23 +438,26 @@ const Home: NextPage = () => {
     setIsSetNode(false);
   }
 
-  const deleteNode = async (node:NodeInfo) => {
-    const nodeData  = (await _db.get(_db.ref(db, `nodes/${floor}`))).val();
-    const linkData = (await _db.get(_db.ref(db, `links/${floor}`))).val();
-    const nodeEntries = Object.values(nodeData);
-    const linkEntries = Object.values(linkData);
-    const id = node.id;
-    console.log(nodeEntries);
-    const filterList = nodeEntries.filter((v,i)=>i!==id).map((v,i)=>(v as NodeInfo).id = i);
-    // await _db.set(_db.ref(db, `nodes/${floor}`),filterList);
-    console.log(id);
-    console.log(filterList);
-  }
+  // const deleteNode = async (node:NodeInfo) => {
+  //   const nodeData  = (await _db.get(_db.ref(db, `nodes/${floor}`))).val();
+  //   const linkData = (await _db.get(_db.ref(db, `links/${floor}`))).val();
+  //   const nodeEntries = Object.entries(nodeData);
+  //   const linkEntries = Object.values(linkData);
+  //   const id = node.id;
+  //   console.log(nodeEntries);
+  //   const filterList = nodeEntries.filter((v:any)=> v[0]!==id);
+  //   let newNode = {};
+  //   // filterList.map((v,i)=>newNode[`${i}`]=)
+  //   // await _db.set(_db.ref(db, `nodes/${floor}`),filterList);
+  //   console.log(id);
+  //   console.log(filterList);
+  //   setIsDeleteNode(false);
+  // }
 
   const handleNode = async (node:NodeInfo) => {
     if(isAddLink) await addLink(node);
     if(isSetNode) await setDestNode(node);
-    if(isDeleteNode) await deleteNode(node);
+    // if(isDeleteNode) await deleteNode(node);
   }
 
   return (
@@ -490,7 +527,7 @@ const Home: NextPage = () => {
               </div>
             )}
           </div>
-          <div>
+          <div className='flex flex-col justify-center items-center'>
             <div>
               <button
                 className={`
@@ -509,15 +546,6 @@ const Home: NextPage = () => {
                 onClick={()=>{setIsAddLink(!isAddLink)}}
               >
                 Add Link
-              </button>
-              <button
-                className={`
-                  h-min px-2 py-1 border-2 rounded-md text-white
-                  ${isDeleteNode ? "bg-green-500" : "bg-black"}
-                `}
-                onClick={()=>{setIsDeleteNode(!isDeleteNode)}}
-              >
-                Delete Node
               </button>
             </div>
             <div className='flex gap-3'>
@@ -619,7 +647,7 @@ const Home: NextPage = () => {
             </tbody>
           </table>
           <div>
-          Detail
+          Specific
           <textarea
             className='w-full h-30 resize-none cursor-text'
             value={roomDetail}
@@ -674,6 +702,7 @@ const Home: NextPage = () => {
               {bles?.length && bles?.map((data:any, key:number)=>(
                 <BLEPrint data={data} key={key}/>
               ))}
+              <canvas ref={canvasRef} className="absolute w-full h-full"></canvas>
             </div>
           </div>
 
